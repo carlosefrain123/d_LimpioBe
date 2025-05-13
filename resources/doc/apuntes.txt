@@ -15,4 +15,13 @@ php artisan migrate
 3. Si quieres agregar una linea de codigo en la migración:
 php artisan migrate:fresh
 
-4.
+4. Crear modelos:
+php artisan make:model Category
+php artisan make:model Product
+php artisan make:model Brand
+php artisan make:model Order
+php artisan make:model OrderItem
+php artisan make:model Payment
+php artisan make:model Wishlist
+php artisan make:model Review
+php artisan make:model ShippingAddress
