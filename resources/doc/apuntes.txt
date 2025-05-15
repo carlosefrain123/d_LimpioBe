@@ -50,3 +50,7 @@ php artisan db:seed --class=PaymentSeeder
 php artisan db:seed --class=WishlistSeeder
 php artisan db:seed --class=ReviewSeeder
 php artisan db:seed --class=ShippingAddressSeeder
+
+7. Instalar Laravel Breeze
+- composer require laravel/breeze --dev
+- php artisan breeze:install     > blade > yes > enter
