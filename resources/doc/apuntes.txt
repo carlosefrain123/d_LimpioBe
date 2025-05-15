@@ -25,3 +25,28 @@ php artisan make:model Payment
 php artisan make:model Wishlist
 php artisan make:model Review
 php artisan make:model ShippingAddress
+
+5. Creación de los Seeders
+php artisan make:seeder UserSeeder
+php artisan make:seeder CategorySeeder
+php artisan make:seeder BrandSeeder
+php artisan make:seeder ProductSeeder
+php artisan make:seeder OrderSeeder
+php artisan make:seeder OrderItemSeeder
+php artisan make:seeder PaymentSeeder
+php artisan make:seeder WishlistSeeder
+php artisan make:seeder ReviewSeeder
+php artisan make:seeder ShippingAddressSeeder
+
+
+6. Para poblar la bd de los seeders
+php artisan db:seed --class=UserSeeder
+php artisan db:seed --class=CategorySeeder
+php artisan db:seed --class=BrandSeeder
+php artisan db:seed --class=ProductSeeder
+php artisan db:seed --class=OrderSeeder
+php artisan db:seed --class=OrderItemSeeder
+php artisan db:seed --class=PaymentSeeder
+php artisan db:seed --class=WishlistSeeder
+php artisan db:seed --class=ReviewSeeder
+php artisan db:seed --class=ShippingAddressSeeder
