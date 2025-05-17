@@ -58,5 +58,6 @@ php artisan db:seed --class=ShippingAddressSeeder
 8. Se agrega el comando para correo eléctronico
 php artisan make:mail WelcomeUser --markdown=emails.welcome
 
-
+9. Se crea el comando para el cambio de contraseña
+php artisan make:mail PasswordChanged --markdown=emails.password-changed
 
