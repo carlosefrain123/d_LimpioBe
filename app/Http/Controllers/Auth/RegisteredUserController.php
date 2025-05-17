@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -52,6 +51,9 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         // Enviar correo de bienvenida
-        return redirect()->route('dashboard');
+        Mail::to($user->email)->send(new WelcomeUser($user));
+
+        // Redirigir directamente (evitamos RouteServiceProvider)
+        return redirect('/dashboard');
     }
 }

@@ -54,3 +54,9 @@ php artisan db:seed --class=ShippingAddressSeeder
 7. Instalar Laravel Breeze
 - composer require laravel/breeze --dev
 - php artisan breeze:install     > blade > yes > enter
+
+8. Se agrega el comando para correo eléctronico
+php artisan make:mail WelcomeUser --markdown=emails.welcome
+
+
+
