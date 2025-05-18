@@ -77,3 +77,7 @@ php artisan make:migration add_price2_to_products_table --table=products
 
 12. Se crea el HomeController
 php artisan make:controller HomeController
+
+13. Se refresca la migración de ProductSeeder
+php artisan storage:link
+php artisan migrate:fresh --seed
