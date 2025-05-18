@@ -71,3 +71,9 @@ php artisan make:controller PaymentController --resource
 php artisan make:controller WishlistController --resource
 php artisan make:controller ReviewController --resource
 php artisan make:controller ShippingAddressController --resource
+
+11.Agregar la migración del precio2 (descuento)
+php artisan make:migration add_price2_to_products_table --table=products
+
+12. Se crea el HomeController
+php artisan make:controller HomeController
