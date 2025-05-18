@@ -61,3 +61,13 @@ php artisan make:mail WelcomeUser --markdown=emails.welcome
 9. Se crea el comando para el cambio de contraseña
 php artisan make:mail PasswordChanged --markdown=emails.password-changed
 
+10. Crear controladores
+php artisan make:controller UserController
+php artisan make:controller CategoryController --resource
+php artisan make:controller ProductController --resource
+php artisan make:controller OrderController --resource
+php artisan make:controller CartController --resource
+php artisan make:controller PaymentController --resource
+php artisan make:controller WishlistController --resource
+php artisan make:controller ReviewController --resource
+php artisan make:controller ShippingAddressController --resource
