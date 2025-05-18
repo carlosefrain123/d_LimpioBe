@@ -38,7 +38,7 @@
                                 <i class="iconly-Category icli theme-color"></i>
                             </span>
                         </button>
-                        <a href="#" class="web-logo nav-logo">
+                        <a href="{{route('home')}}" class="web-logo nav-logo">
                             <img src="{{ asset('assets/images/logo/3.png') }}"
                                 class="img-fluid blur-up lazyload" alt="" style="width: 75px;">
                         </a>
