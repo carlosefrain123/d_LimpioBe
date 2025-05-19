@@ -1089,6 +1089,17 @@ $('.slider-user').slick({
     },
     ]
 });
+$('.slider-animate').slick({
+    autoplay: true,
+    autoplaySpeed: 8000, // Tiempo entre cada slide
+    speed: 1000,          // Duración del fade
+    lazyLoad: 'progressive',
+    fade: true,
+    dots: true,
+    arrows: false,        // Opcional: oculta flechas
+    pauseOnHover: false,
+    pauseOnFocus: false,
+});
 
 $('.search-product').slick({
     arrows: false,
