@@ -19,4 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/{id}/{slug}', [ProductController::class, 'details'])->name('product.details');
+
 require __DIR__.'/auth.php';

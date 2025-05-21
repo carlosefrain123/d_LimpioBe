@@ -38,18 +38,18 @@
                             <div class="product-image">
                                 <div class="label-flex">
                                     <button class="btn p-0 wishlist btn-wishlist notifi-wishlist"
-                                        onclick="addToWishlist({{ $product->id }}, '{{ asset('storage/' . $product->image) }}', '{{ $product->price }}' , '{{ $product->name }}')">
+                                        onclick="addToWishlist({{ $product->id }}, '{{ asset('storage/' . $product->image) }}', '{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}', '{{ $product->price }}' , '{{ $product->name }}')">
                                         <i class="iconly-Heart icli"></i>
                                     </button>
                                 </div>
 
-                                <a href="#">
+                                <a href="{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}">
                                     <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" alt="{{ $product->name }}">
                                 </a>
 
                                 <ul class="option">
                                     <li data-bs-toggle="tooltip" data-bs-placement="top" title="Vista Rápida">
-                                        <a href="#">
+                                        <a href="{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}">
                                             <i class="iconly-Show icli"></i>
                                         </a>
                                     </li>
@@ -65,7 +65,7 @@
                                         </li>
                                     @endfor
                                 </ul>
-                                <a href="#">
+                                <a href="{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}">
                                     <h5 class="name">{{ $product->name }}</h5>
                                 </a>
                                 <h5 class="price theme-color">
@@ -85,7 +85,8 @@
                                         </div>
                                     </div>
 
-                                    <button class="buy-button buy-button-2 btn btn-cart">
+                                    <button class="buy-button buy-button-2 btn btn-cart"
+                                        onclick="addToCart({{ $product->id }}, '{{ asset('storage/' . $product->image) }}', '{{ route('product.details', ['id' => $product->id, 'slug' => $product->slug]) }}', '{{ $product->price }}', '{{ $product->name }}')">
                                         <i class="iconly-Buy icli text-white m-0"></i>
                                     </button>
                                 </div>

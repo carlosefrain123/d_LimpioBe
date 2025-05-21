@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -60,5 +61,12 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function details($id, $slug)
+    {
+        // Buscar el producto
+        $product = Product::where('id', $id)->where('slug', $slug)->firstOrFail();
+
+        return view('products.details', compact('product'));
     }
 }
