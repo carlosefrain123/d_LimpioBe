@@ -445,6 +445,7 @@
     <!-- Bg overlay End -->
 
     @include('partials.js')
+    <script src="{{asset('ja/cart.js')}}"></script>
 </body>
 
 </html>
