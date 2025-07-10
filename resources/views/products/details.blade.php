@@ -159,11 +159,12 @@
                         <ul class="nav nav-tabs custom-nav" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                                    data-bs-target="#description" type="button" role="tab">Description</button>
+                                    data-bs-target="#description" type="button" role="tab">Descripción</button>
                             </li>
+
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review"
-                                    type="button" role="tab">Review</button>
+                                    type="button" role="tab">Reseñas</button>
                             </li>
                         </ul>
 
@@ -175,360 +176,131 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="tab-pane fade" id="review" role="tabpanel">
                                 <div class="review-box">
                                     <div class="row">
+                                        <!-- Sección de Rating Promedio -->
                                         <div class="col-xl-5">
                                             <div class="product-rating-box">
                                                 <div class="row">
                                                     <div class="col-xl-12">
                                                         <div class="product-main-rating">
-                                                            <h2>3.40
+                                                            <h2>{{ number_format($product->reviews->avg('rating'), 2) }}
                                                                 <i data-feather="star"></i>
                                                             </h2>
-
-                                                            <h5>5 Overall Rating</h5>
+                                                            <h5>Calificación General</h5>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-xl-12">
                                                         <ul class="product-rating-list">
-                                                            <li>
-                                                                <div class="rating-product">
-                                                                    <h5>5<i data-feather="star"></i></h5>
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar" style="width: 40%;">
+                                                            @for ($i = 5; $i >= 1; $i--)
+                                                                @php
+                                                                    $count = $product->reviews
+                                                                        ->where('rating', $i)
+                                                                        ->count();
+                                                                    $percentage =
+                                                                        $product->reviews->count() > 0
+                                                                            ? ($count / $product->reviews->count()) *
+                                                                                100
+                                                                            : 0;
+                                                                @endphp
+                                                                <li>
+                                                                    <div class="rating-product">
+                                                                        <h5>{{ $i }}<i data-feather="star"></i>
+                                                                        </h5>
+                                                                        <div class="progress">
+                                                                            <div class="progress-bar"
+                                                                                style="width: {{ $percentage }}%;">
+                                                                            </div>
                                                                         </div>
+                                                                        <h5 class="total">{{ $count }}</h5>
                                                                     </div>
-                                                                    <h5 class="total">2</h5>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="rating-product">
-                                                                    <h5>4<i data-feather="star"></i></h5>
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar" style="width: 20%;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5 class="total">1</h5>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="rating-product">
-                                                                    <h5>3<i data-feather="star"></i></h5>
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar" style="width: 0%;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5 class="total">0</h5>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="rating-product">
-                                                                    <h5>2<i data-feather="star"></i></h5>
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar" style="width: 20%;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5 class="total">1</h5>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="rating-product">
-                                                                    <h5>1<i data-feather="star"></i></h5>
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar" style="width: 20%;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <h5 class="total">1</h5>
-                                                                </div>
-                                                            </li>
-
+                                                                </li>
+                                                            @endfor
                                                         </ul>
 
-                                                        <div class="review-title-2">
-                                                            <h4 class="fw-bold">Review this product</h4>
-                                                            <p>Let other customers know what you think</p>
-                                                            <button class="btn" type="button" data-bs-toggle="modal"
-                                                                data-bs-target="#writereview">Write a
-                                                                review</button>
-                                                        </div>
+                                                        <!-- Botón para dejar una reseña -->
+                                                        @auth
+                                                            @if (auth()->user()->hasPurchasedProduct($product->id))
+                                                                <div class="review-title-2">
+                                                                    <h4 class="fw-bold">Califica este producto</h4>
+                                                                    <p>Comparte tu experiencia con otros clientes</p>
+
+                                                                    @php
+                                                                        $userReview = $product->reviews
+                                                                            ->where('user_id', auth()->id())
+                                                                            ->first();
+                                                                    @endphp
+
+                                                                    @if ($userReview)
+                                                                        <!-- Editar reseña existente -->
+                                                                        <button class="btn" type="button"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#writereview"
+                                                                            onclick="editReview({{ $userReview->id }}, '{{ $userReview->rating }}', '{{ $userReview->comment }}')">
+                                                                            Editar mi reseña
+                                                                        </button>
+                                                                    @else
+                                                                        <!-- Agregar nueva reseña -->
+                                                                        <button class="btn" type="button"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#writereview">
+                                                                            Escribir una reseña
+                                                                        </button>
+                                                                    @endif
+                                                                </div>
+                                                            @endif
+                                                        @endauth
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Lista de Reseñas -->
                                         <div class="col-xl-7">
                                             <div class="review-people">
                                                 <ul class="review-list">
-                                                    <li>
-                                                        <div class="people-box">
-                                                            <div>
-                                                                <div class="people-image people-text">
-                                                                    <img alt="user" class="img-fluid "
-                                                                        src="../assets/images/review/1.jpg">
-                                                                </div>
-                                                            </div>
-                                                            <div class="people-comment">
-                                                                <div class="people-name"><a href="javascript:void(0)"
-                                                                        class="name">Jack Doe</a>
-                                                                    <div class="date-time">
-                                                                        <h6 class="text-content"> 29 Sep 2023
-                                                                            06:40:PM
-                                                                        </h6>
-                                                                        <div class="product-rating">
-                                                                            <ul class="rating">
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"></i>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="reply">
-                                                                    <p>Avoid this product. The quality is
-                                                                        terrible, and
-                                                                        it started falling apart almost
-                                                                        immediately. I
-                                                                        wish I had read more reviews before
-                                                                        buying.
-                                                                        Lesson learned.</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="people-box">
-                                                            <div>
-                                                                <div class="people-image people-text">
-                                                                    <img alt="user" class="img-fluid "
-                                                                        src="../assets/images/review/2.jpg">
-                                                                </div>
-                                                            </div>
-                                                            <div class="people-comment">
-                                                                <div class="people-name"><a href="javascript:void(0)"
-                                                                        class="name">Jessica
-                                                                        Miller</a>
-                                                                    <div class="date-time">
-                                                                        <h6 class="text-content"> 29 Sep 2023
-                                                                            06:34:PM
-                                                                        </h6>
-                                                                        <div class="product-rating">
+                                                    @forelse($product->reviews as $review)
+                                                        <li>
+                                                            <div class="people-box">
+                                                                <div class="people-comment">
+                                                                    <div class="people-name">
+                                                                        <a href="javascript:void(0)"
+                                                                            class="name">{{-- {{ $review->user->name }} --}}</a>
+                                                                        <div class="date-time">
+                                                                            <h6 class="text-content">
+                                                                                {{ $review->created_at->format('d M Y h:i A') }}
+                                                                            </h6>
                                                                             <div class="product-rating">
                                                                                 <ul class="rating">
-                                                                                    <li>
-                                                                                        <i data-feather="star"
-                                                                                            class="fill"></i>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <i data-feather="star"
-                                                                                            class="fill"></i>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <i data-feather="star"
-                                                                                            class="fill"></i>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <i data-feather="star"
-                                                                                            class="fill"></i>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <i data-feather="star"></i>
-                                                                                    </li>
+                                                                                    @for ($i = 1; $i <= 5; $i++)
+                                                                                        <li>
+                                                                                            <i data-feather="star"
+                                                                                                class="{{ $i <= $review->rating ? 'fill' : '' }}"></i>
+                                                                                        </li>
+                                                                                    @endfor
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="reply">
-                                                                    <p>Honestly, I regret buying this item. The
-                                                                        quality
-                                                                        is subpar, and it feels like a waste of
-                                                                        money. I
-                                                                        wouldn't recommend it to anyone.</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="people-box">
-                                                            <div>
-                                                                <div class="people-image people-text">
-                                                                    <img alt="user" class="img-fluid "
-                                                                        src="../assets/images/review/3.jpg">
-                                                                </div>
-                                                            </div>
-                                                            <div class="people-comment">
-                                                                <div class="people-name"><a href="javascript:void(0)"
-                                                                        class="name">Rome Doe</a>
-                                                                    <div class="date-time">
-                                                                        <h6 class="text-content"> 29 Sep 2023
-                                                                            06:18:PM
-                                                                        </h6>
-                                                                        <div class="product-rating">
-                                                                            <ul class="rating">
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"></i>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
+                                                                    <div class="reply">
+                                                                        <p>{{ $review->comment }}</p>
                                                                     </div>
                                                                 </div>
-                                                                <div class="reply">
-                                                                    <p>I am extremely satisfied with this
-                                                                        purchase. The
-                                                                        item arrived promptly, and the quality
-                                                                        is
-                                                                        exceptional. It's evident that the
-                                                                        makers paid
-                                                                        attention to detail. Overall, a
-                                                                        fantastic buy!
-                                                                    </p>
-                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="people-box">
-                                                            <div>
-                                                                <div class="people-image people-text">
-                                                                    <img alt="user" class="img-fluid "
-                                                                        src="../assets/images/review/4.jpg">
-                                                                </div>
-                                                            </div>
-                                                            <div class="people-comment">
-                                                                <div class="people-name"><a href="javascript:void(0)"
-                                                                        class="name">Sarah
-                                                                        Davis</a>
-                                                                    <div class="date-time">
-                                                                        <h6 class="text-content"> 29 Sep 2023
-                                                                            05:58:PM
-                                                                        </h6>
-                                                                        <div class="product-rating">
-                                                                            <ul class="rating">
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"></i>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="reply">
-                                                                    <p>I am genuinely delighted with this item.
-                                                                        It's a
-                                                                        total winner! The quality is superb, and
-                                                                        it has
-                                                                        added so much convenience to my daily
-                                                                        routine.
-                                                                        Highly satisfied customer!</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="people-box">
-                                                            <div>
-                                                                <div class="people-image people-text">
-                                                                    <img alt="user" class="img-fluid "
-                                                                        src="../assets/images/review/5.jpg">
-                                                                </div>
-                                                            </div>
-                                                            <div class="people-comment">
-                                                                <div class="people-name"><a href="javascript:void(0)"
-                                                                        class="name">John Doe</a>
-                                                                    <div class="date-time">
-                                                                        <h6 class="text-content"> 29 Sep 2023
-                                                                            05:22:PM
-                                                                        </h6>
-                                                                        <div class="product-rating">
-                                                                            <ul class="rating">
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"
-                                                                                        class="fill"></i>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <i data-feather="star"></i>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="reply">
-                                                                    <p>Very impressed with this purchase. The
-                                                                        item is of
-                                                                        excellent quality, and it has exceeded
-                                                                        my
-                                                                        expectations.</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+                                                        </li>
+                                                    @empty
+                                                        <p class="text-center">No hay reseñas para este producto.</p>
+                                                    @endforelse
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -540,61 +312,42 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Write a review</h1>
+                    <h1 class="modal-title fs-5">Escribir una reseña</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
                 <div class="modal-body pt-0">
-                    <form class="product-review-form">
-                        <div class="product-wrapper">
-                            <div class="product-image">
-                                <img class="img-fluid" alt="Solid Collared Tshirts"
-                                    src="../assets/images/fashion/product/26.jpg">
-                            </div>
-                            <div class="product-content">
-                                <h5 class="name">Solid Collared Tshirts</h5>
-                                <div class="product-review-rating">
-                                    <div class="product-rating">
-                                        <h6 class="price-number">$16.00</h6>
-                                    </div>
-                                </div>
+                    <form id="reviewForm" action="{{ route('reviews.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" id="review_id" name="review_id">
+
+                        <div class="review-box">
+                            <label>Calificación</label>
+                            <div class="product-rating">
+                                <select name="rating" id="review_rating" class="form-control">
+                                    <option value="5">★★★★★</option>
+                                    <option value="4">★★★★☆</option>
+                                    <option value="3">★★★☆☆</option>
+                                    <option value="2">★★☆☆☆</option>
+                                    <option value="1">★☆☆☆☆</option>
+                                </select>
                             </div>
                         </div>
+
                         <div class="review-box">
-                            <div class="product-review-rating">
-                                <label>Rating</label>
-                                <div class="product-rating">
-                                    <ul class="rating">
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star" class="fill"></i>
-                                        </li>
-                                        <li>
-                                            <i data-feather="star"></i>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <label for="review_comment" class="form-label">Tu reseña *</label>
+                            <textarea id="review_comment" name="comment" rows="3" class="form-control"
+                                placeholder="Escribe tu reseña aquí"></textarea>
                         </div>
-                        <div class="review-box">
-                            <label for="content" class="form-label">Your Question *</label>
-                            <textarea id="content" rows="3" class="form-control" placeholder="Your Question"></textarea>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-md btn-theme-outline fw-bold"
+                                data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-md fw-bold text-light theme-bg-color">Guardar</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-md btn-theme-outline fw-bold"
-                        data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-md fw-bold text-light theme-bg-color">Save changes</button>
                 </div>
             </div>
         </div>

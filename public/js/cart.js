@@ -69,3 +69,10 @@ function loadWishlist() {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     console.log("Lista de deseos cargado:", wishlist);
 }
+
+// Función para editar una reseña (manteniendo la funcionalidad previa)
+function editReview(reviewId, rating, comment) {
+    document.getElementById("review_id").value = reviewId;
+    document.getElementById("review_rating").value = rating;
+    document.getElementById("review_comment").value = comment;
+}
