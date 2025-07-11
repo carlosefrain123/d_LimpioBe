@@ -67,6 +67,16 @@ class ProductController extends Controller
         // Buscar el producto
         $product = Product::where('id', $id)->where('slug', $slug)->firstOrFail();
 
-        return view('products.details', compact('product'));
+        // Obtener los 6 productos más vendidos
+        $topSellingProducts = $this->getTopSellingProducts(6);
+
+        return view('products.details', compact('product', 'topSellingProducts'));
+    }
+    public function getTopSellingProducts($limit = 6)
+    {
+        return Product::withCount('orderItems') // Contar la cantidad de veces que un producto fue vendido
+            ->orderByDesc('order_items_count') // Ordenar por los más vendidos
+            ->take($limit) // Tomar solo los productos que se necesiten
+            ->get();
     }
 }
