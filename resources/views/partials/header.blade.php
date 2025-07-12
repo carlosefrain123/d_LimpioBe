@@ -85,7 +85,7 @@
 
 
                                     <li class="onhover-dropdown">
-                                        <a href="#" class="header-icon swap-icon">
+                                        <a href="{{ route('wishlist.index') }}" class="header-icon swap-icon">
                                             <small id="wishlist-count" class="badge-number">0</small>
                                             <i class="iconly-Heart icli"></i>
                                         </a>
