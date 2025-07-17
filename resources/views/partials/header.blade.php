@@ -38,7 +38,7 @@
                                 <i class="iconly-Category icli theme-color"></i>
                             </span>
                         </button>
-                        <a href="{{route('home')}}" class="web-logo nav-logo">
+                        <a href="{{ route('home') }}" class="web-logo nav-logo">
                             <img src="{{ asset('assets/images/logo/3.png') }}"
                                 class="img-fluid blur-up lazyload" alt="" style="width: 75px;">
                         </a>
@@ -92,7 +92,7 @@
                                     </li>
 
                                     <li class="onhover-dropdown">
-                                        <a href="#" class="header-icon bag-icon">
+                                        <a href="{{ route('cart.index') }}" class="header-icon bag-icon">
                                             <small id="cart-count-uno" class="badge-number">0</small>
                                             <i class="iconly-Bag-2 icli"></i>
                                         </a>
@@ -108,7 +108,7 @@
                                             </div>
 
                                             <div class="button-group">
-                                                <a href="#" class="btn btn-sm cart-button">Ver
+                                                <a href="{{ route('cart.index') }}" class="btn btn-sm cart-button">Ver
                                                     Carrito</a>
                                                 <a href="checkout.html"
                                                     class="btn btn-sm cart-button theme-bg-color

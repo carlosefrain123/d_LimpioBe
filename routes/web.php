@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -24,7 +26,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/{id}/{slug}', [ProductController::class, 'details'])->name('product.details');
 
 Route::post('/reviews', [ReviewController::class, 'store'])->middleware('auth')->name('reviews.store');
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+
 
 
 require __DIR__.'/auth.php';
