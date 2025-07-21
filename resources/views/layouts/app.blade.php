@@ -78,7 +78,7 @@
             <span id="cart-count-dos">0</span>
             <br><br>
         </h6>
-        <button onclick="location.href = '';" class="btn item-button btn-sm fw-bold"
+        <button onclick="location.href = '{{ route('cart.index') }}';" class="btn item-button btn-sm fw-bold"
             id="total-uno">$ 0.00</button>
     </div>
     <!-- Items section End -->

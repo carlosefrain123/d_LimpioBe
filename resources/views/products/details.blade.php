@@ -23,6 +23,7 @@
             </div>
         </div>
     </section>
+
     <section class="product-section">
         <div class="container-fluid-lg">
             <div class="row">
@@ -150,7 +151,7 @@
             </div>
         </div>
     </section>
-    <!-- Nav Tab Section Start -->
+
     <section>
         <div class="container-fluid-lg">
             <div class="row">
@@ -268,7 +269,7 @@
                                                                 <div class="people-comment">
                                                                     <div class="people-name">
                                                                         <a href="javascript:void(0)"
-                                                                            class="name">{{-- {{ $review->user->name }} --}}</a>
+                                                                            class="name">{{ $review->user->name }}</a>
                                                                         <div class="date-time">
                                                                             <h6 class="text-content">
                                                                                 {{ $review->created_at->format('d M Y h:i A') }}
@@ -307,7 +308,7 @@
             </div>
         </div>
     </section>
-    <!-- Related Product Section Start -->
+
     <section class="related-products section-b-space">
         <div class="container-fluid-lg">
             <h2 class="text-center mb-4">🔥 Productos Más Vendidos 🔥</h2>
@@ -386,7 +387,7 @@
             </div>
         </div>
     </section>
-    <!-- Related Product Section End -->
+
     <!-- Review Modal Start -->
     <div class="modal fade theme-modal question-modal" id="writereview" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -433,4 +434,5 @@
         </div>
     </div>
     <!-- Review Modal End -->
+
 @endsection

@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     loadCart();
     loadWishlist();
     updateWishlistCount(); // Actualizar la cantidad de productos en la wishlist al cargar la página
+    updateCartCount();
+    updateCartTotal();
+    updateCartCount();
+    updateCartDropdown();
 });
 
 // Función para actualizar la cantidad en carrito y wishlist
@@ -95,7 +99,7 @@ function loadCart() {
     if (cart.length === 0) {
         cartContainer.innerHTML =
             "<p class='text-center'>Tu carrito está vacío.</p>";
-            updateCartTotal();
+        updateCartTotal();
         return;
     }
 
@@ -217,8 +221,8 @@ function loadWishlist() {
 
                         <a href="${chunk.url}">
                             <img src="${chunk.image}" class="img-fluid" alt="${
-                            chunk.name
-                        }">
+            chunk.name
+        }">
                         </a>
 
                         <ul class="option">
@@ -259,8 +263,8 @@ function loadWishlist() {
                             <button class="buy-button buy-button-2 btn btn-cart" onclick="addToCart(${
                                 chunk.id
                             }, '${chunk.image}', '${chunk.url}', '${
-                                chunk.price
-                            }')">
+            chunk.price
+        }')">
                                 <i class="iconly-Buy icli text-white m-0"></i>
                             </button>
                         </div>
@@ -292,4 +296,120 @@ function updateWishlistCount() {
     if (wishlistCountElement) {
         wishlistCountElement.textContent = wishlist.length;
     }
+}
+
+function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartElement = document.getElementById("cart-count-uno");
+    let cartElement2 = document.getElementById("cart-count-dos");
+
+    if (cartElement) {
+        cartElement.textContent = cart.length;
+        cartElement2.textContent = cart.length;
+    }
+}
+
+// Función para actualizar el total del carrito
+function updateCartTotal() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let subtotal = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+    );
+    let shipping = cart.length > 0 ? 6.9 : 0; // Agregar envío si hay productos
+    let total = subtotal + shipping;
+
+    // Guardar total en LocalStorage para usarlo en cualquier vista
+    localStorage.setItem("cartTotal", total.toFixed(2));
+
+    // Actualizar en la vista si existen los elementos
+    if (document.getElementById("subtotal")) {
+        document.getElementById("subtotal").textContent = `$ ${subtotal.toFixed(
+            2
+        )}`;
+    }
+    if (document.getElementById("total")) {
+        document.getElementById("total").textContent = `$ ${total.toFixed(2)}`;
+    }
+    if (document.getElementById("total-uno")) {
+        document.getElementById("total-uno").textContent = `$ ${total.toFixed(
+            2
+        )}`;
+    }
+    if (document.getElementById("cart-dropdown-total")) {
+        document.getElementById(
+            "cart-dropdown-total"
+        ).textContent = `$ ${total.toFixed(2)}`;
+    }
+}
+
+// Función para eliminar un producto del carrito
+function removeFromCart(productId) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart = cart.filter((item) => item.id !== productId);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+    updateCartTotal();
+    updateCartDropdown();
+    loadCart();
+}
+
+// Simulación del proceso de pago
+function checkout() {
+    alert("Redirigiendo a la página de pago...");
+}
+
+function updateCartDropdown() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartDropdown = document.getElementById("cart-dropdown");
+    let cartTotalElement = document.getElementById("cart-dropdown-total");
+
+    if (!cartDropdown || !cartTotalElement) return;
+
+    if (cart.length === 0) {
+        cartDropdown.innerHTML =
+            "<li class='text-center'>Tu carrito está vacío.</li>";
+        cartTotalElement.textContent = "$ 0.00";
+        return;
+    }
+
+    let htmlContent = "";
+    let total = 0;
+
+    cart.forEach((item) => {
+        let itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        htmlContent += `
+            <li class="product-box-contain">
+                <div class="drop-cart">
+                    <a href="${item.url}" class="drop-image">
+                        <img src="${
+                            item.image
+                        }" class="blur-up lazyload" alt="${
+            item.name
+        }" style="width: 50px; height: 50px; object-fit: cover;">
+                    </a>
+
+                    <div class="drop-contain">
+                        <a href="${item.url}">
+                            <h5 class="text-truncate" style="max-width: 150px;">${
+                                item.name
+                            }</h5>
+                        </a>
+                        <h6><span>${item.quantity} x</span> $ ${parseFloat(
+            item.price
+        ).toFixed(2)}</h6>
+                        <button class="close-button close_button" onclick="removeFromCart(${
+                            item.id
+                        }, true)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+            </li>
+        `;
+    });
+
+    cartDropdown.innerHTML = htmlContent;
 }
