@@ -8,6 +8,7 @@ php artisan make:migration create_payments_table
 php artisan make:migration create_wishlists_table
 php artisan make:migration create_reviews_table
 php artisan make:migration create_shipping_addresses_table
+php artisan make:migration create_cart_table
 
 2. Comando de migración:
 php artisan migrate
@@ -25,6 +26,7 @@ php artisan make:model Payment
 php artisan make:model Wishlist
 php artisan make:model Review
 php artisan make:model ShippingAddress
+php artisan make:model Cart
 
 5. Creación de los Seeders
 php artisan make:seeder UserSeeder
