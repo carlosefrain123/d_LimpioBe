@@ -59,7 +59,7 @@
                                                                 <li><h4 class="fw-500">{{ $address->address }}</h4></li>
                                                                 <li><p class="text-content"><span class="text-title">Ciudad:</span> {{ $address->city }}</p></li>
                                                                 <li><h6 class="text-content"><span class="text-title">Estado:</span> {{ $address->state }}</h6></li>
-                                                                <li><h6 class="text-content"><span class="text-title">Código Postal:</span> {{ $address->postal_code }}</h6></li>
+                                                                <li><h6 class="text-content"><span class="text-title">Código Postal:</span> {{ $address->zip_code }}</h6></li>
                                                                 <li><h6 class="text-content"><span class="text-title">País:</span> {{ $address->country }}</h6></li>
                                                             </ul>
                                                         </div>

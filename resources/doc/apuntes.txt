@@ -9,6 +9,8 @@ php artisan make:migration create_wishlists_table
 php artisan make:migration create_reviews_table
 php artisan make:migration create_shipping_addresses_table
 php artisan make:migration create_cart_table
+php artisan make:migration add_user_address_id_to_orders_table
+
 
 2. Comando de migración:
 php artisan migrate
