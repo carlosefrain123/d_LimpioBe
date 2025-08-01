@@ -89,6 +89,11 @@
     @include('partials.js')
 
     <script src="{{ asset('js/cart.js') }}"></script>
+    <script>
+        window.authUserId = {{ Auth::check() ? Auth::id() : 'null' }};
+        window.syncCartWishlistUrl = "{{ route('sync.cart.wishlist') }}";
+    </script>
+    <script src="{{ asset('js/syncro.js') }}"></script>
 </body>
 
 </html>

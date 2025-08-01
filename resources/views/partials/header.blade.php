@@ -32,15 +32,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="navbar-top">
-                        <button class="navbar-toggler d-xl-none d-block p-0 me-3" type="button"
-                            data-bs-toggle="offcanvas" data-bs-target="#primaryMenu">
+                        <button class="navbar-toggler d-xl-none d-block p-0 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu">
                             <span class="navbar-toggler-icon">
                                 <i class="iconly-Category icli theme-color"></i>
                             </span>
                         </button>
                         <a href="{{ route('home') }}" class="web-logo nav-logo">
-                            <img src="{{ asset('assets/images/logo/3.png') }}"
-                                class="img-fluid blur-up lazyload" alt="" style="width: 75px;">
+                            <img src="{{ asset('assets/images/logo/3.png') }}" class="img-fluid blur-up lazyload" alt="" style="width: 75px;">
                         </a>
 
                         <div class="search-full">
@@ -58,11 +56,13 @@
                         <div class="middle-box">
                             <div class="center-box">
                                 <div class="searchbar-box order-xl-1 d-none d-xl-block">
-                                    <input type="search" class="form-control" id="exampleFormControlInput1"
-                                        placeholder="search for product, delivered to your door...">
-                                    <button class="btn search-button">
-                                        <i class="iconly-Search icli"></i>
-                                    </button>
+                                    <form action="{{ route('shop.index') }}" method="GET" class="search-form">
+                                        <input type="text" name="search" class="form-control" placeholder="Buscar productos..."
+                                            value="{{ request('search') }}">
+                                        <button type="submit" class="btn search-button">
+                                            <i class="iconly-Search icli"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -108,12 +108,9 @@
                                             </div>
 
                                             <div class="button-group">
-                                                <a href="{{ route('cart.index') }}" class="btn btn-sm cart-button">Ver
-                                                    Carrito</a>
-                                                <a href="checkout.html"
-                                                    class="btn btn-sm cart-button theme-bg-color
-                                                text-white">Proceder
-                                                    al Pago</a>
+                                                <a href="{{ route('cart.index') }}" class="btn btn-sm cart-button">Ver Carrito</a>
+                                                <a href="{{ route('cart.checkout') }}" class="btn btn-sm cart-button theme-bg-color
+                                                text-white">Proceder al Pago</a>
                                             </div>
                                         </div>
                                     </li>
@@ -128,7 +125,7 @@
                                         <div class="delivery-login-box">
                                             <div class="delivery-detail">
                                                 <h6>Hola,</h6>
-                                                <h5>{{ Auth::user()->name ?? 'Mi Cuenta' }}</h5>
+                                                <h5>{{ Auth::user()->name ?? 'Mi Cuenta'}}</h5>
                                             </div>
                                         </div>
 
@@ -141,12 +138,9 @@
                                                     </li>
 
                                                     <li class="product-box-contain">
-                                                        <form method="POST" action="{{ route('logout') }}"
-                                                            style="display: inline;">
+                                                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                                                             @csrf
-                                                            <a href="#"
-                                                                onclick="event.preventDefault(); this.closest('form').submit();"
-                                                                class="text-danger">
+                                                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="text-danger">
                                                                 Cerrar Sesión
                                                             </a>
                                                         </form>

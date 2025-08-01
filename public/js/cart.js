@@ -80,15 +80,6 @@ function addToWishlist(productId, imageUrl, url, price, name) {
     }
 }
 
-// Función para eliminar un producto de la wishlist
-function removeFromWishlist(productId) {
-    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    wishlist = wishlist.filter((item) => item.id !== productId);
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-    updateWishlistCount();
-    loadWishlist();
-}
-
 // Función para cargar el carrito
 function loadCart() {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -352,6 +343,63 @@ function removeFromCart(productId) {
     updateCartTotal();
     updateCartDropdown();
     loadCart();
+
+    // Eliminar también de la base de datos si el usuario está logueado
+    if (window.authUserId) {
+        fetch("/cart/" + productId, {
+            method: "DELETE",
+            headers: {
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => {
+                if (!res.ok)
+                    throw new Error(
+                        "❌ No se pudo eliminar de la base de datos"
+                    );
+                console.log(
+                    "🧹 Producto eliminado de BD (carrito):",
+                    productId
+                );
+            })
+            .catch((err) => console.error(err));
+    }
+}
+
+// Función para eliminar un producto de la wishlist
+function removeFromWishlist(productId) {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    wishlist = wishlist.filter((item) => item.id !== productId);
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    updateWishlistCount();
+    loadWishlist();
+
+    // Eliminar también de la base de datos si el usuario está logueado
+    if (window.authUserId) {
+        fetch("/wishlist/" + productId, {
+            method: "DELETE",
+            headers: {
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => {
+                if (!res.ok)
+                    throw new Error(
+                        "❌ No se pudo eliminar de la base de datos"
+                    );
+                console.log(
+                    "💔 Producto eliminado de BD (wishlist):",
+                    productId
+                );
+            })
+            .catch((err) => console.error(err));
+    }
 }
 
 // Simulación del proceso de pago
