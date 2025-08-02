@@ -85,3 +85,6 @@ php artisan make:controller HomeController
 13. Se refresca la migración de ProductSeeder
 php artisan storage:link
 php artisan migrate:fresh --seed
+
+14. Instalar Stripe
+composer require stripe/stripe-php
