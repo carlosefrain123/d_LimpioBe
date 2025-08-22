@@ -46,7 +46,8 @@ class ProductController extends Controller
         //
     }
 
-    public function details($id, $slug){
+    public function details($id, $slug)
+    {
         // Buscar el producto
         $product = Product::where('id', $id)->where('slug', $slug)->firstOrFail();
 
@@ -56,7 +57,8 @@ class ProductController extends Controller
         return view('products.details', compact('product', 'topSellingProducts'));
     }
 
-    public function getTopSellingProducts($limit = 6){
+    public function getTopSellingProducts($limit = 6)
+    {
         return Product::withCount('orderItems') // Contar la cantidad de veces que un producto fue vendido
             ->orderByDesc('order_items_count') // Ordenar por los más vendidos
             ->take($limit) // Tomar solo los productos que se necesiten
@@ -102,10 +104,11 @@ class ProductController extends Controller
             })
             ->when(!empty($ratingsFilter), function ($query) use ($ratingsFilter) {
                 return $query->whereIn('id', function ($subQuery) use ($ratingsFilter) {
+                    $ratingsList = implode(',', array_map('intval', $ratingsFilter));
                     $subQuery->select('product_id')
                         ->from('reviews')
                         ->groupBy('product_id')
-                        ->havingRaw('AVG(rating) IN (' . implode(',', array_map('intval', $ratingsFilter)) . ')');
+                        ->havingRaw('ROUND(AVG(rating)) IN (' . $ratingsList . ')');
                 });
             })
             ->when(!empty($search), function ($query) use ($search) {
@@ -117,6 +120,6 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
 
-        return view('shop.index', compact('products','brands', 'categories', 'categoriesFilter', 'brandsFilter','pricesFilter','ratingsFilter', 'search'));
+        return view('shop.index', compact('products', 'brands', 'categories', 'categoriesFilter', 'brandsFilter', 'pricesFilter', 'ratingsFilter', 'search'));
     }
 }
