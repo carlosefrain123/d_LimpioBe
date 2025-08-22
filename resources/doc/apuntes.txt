@@ -92,3 +92,5 @@ composer require stripe/stripe-php
 15. Instalar libreria para el correo eléctronico
 php artisan make:mail OrderConfirmationMail
 
+//Se Intala la libreria de Whatsapp
+16. composer require twilio/sdk

@@ -173,10 +173,28 @@ class PaymentController extends Controller
             ]);
 
             Log::info('💳 Pago registrado con éxito: ' . $paymentIntent->id);
+
             Mail::to($user->email)->send(new OrderConfirmationMail($order));
             Log::info('📧 Correo de confirmación enviado a ' . $user->email);
-            Mail::to($user->email)->send(new OrderConfirmationMail($order));
-            Log::info('📧 Correo de confirmación enviado a ' . $user->email);
+
+            // 💬 Enviar mensaje WhatsApp
+            $whatsapp = new WhatsappService();
+
+            $message = "*¡Hola {$user->name}!*\n\n";
+            $message .= "🧾 *Gracias por tu compra en " . config('app.name') . "*\n";
+            $message .= "📌 *Orden #{$order->id}* - Total: *$" . number_format($order->total_price, 2) . "*\n\n";
+            $message .= "*🛒 Detalles de tu pedido:*\n";
+
+            foreach ($order->orderItems as $item) {
+                $productName = $item->product->name ?? 'Envío';
+                $message .= "- {$productName} x{$item->quantity} - $" . number_format($item->subtotal, 2) . "\n";
+            }
+
+            $message .= "\n📦 Tu pedido está en camino.\n";
+            $message .= "¡Gracias por confiar en nosotros! 🙌";
+
+            $whatsapp->sendMessage($user->phone, $message);
+            Log::info('📲 WhatsApp enviado a ' . $user->phone);
 
             return view('cart.success', compact('order'));
         } catch (\Exception $e) {
