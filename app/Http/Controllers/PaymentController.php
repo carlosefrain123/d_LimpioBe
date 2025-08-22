@@ -173,7 +173,10 @@ class PaymentController extends Controller
             ]);
 
             Log::info('💳 Pago registrado con éxito: ' . $paymentIntent->id);
-
+            Mail::to($user->email)->send(new OrderConfirmationMail($order));
+            Log::info('📧 Correo de confirmación enviado a ' . $user->email);
+            Mail::to($user->email)->send(new OrderConfirmationMail($order));
+            Log::info('📧 Correo de confirmación enviado a ' . $user->email);
 
             return view('cart.success', compact('order'));
         } catch (\Exception $e) {

@@ -11,12 +11,9 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,6 +34,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout/stripe', [PaymentController::class, 'checkout'])->name('stripe.checkout');
     Route::get('/checkout/success', [PaymentController::class, 'success'])->name('checkout.success');
     Route::get('/checkout/cancel', [PaymentController::class, 'cancel'])->name('checkout.cancel');
+
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+
+    Route::post('/dashboard/address', [ShippingAddressController::class, 'storeAddress'])->name('address.store');
+    Route::put('/dashboard/address/{id}', [ShippingAddressController::class, 'updateAddress'])->name('address.update');
+    Route::delete('/dashboard/address/{id}', [ShippingAddressController::class, 'destroyAddress'])->name('address.destroy');
+
+    Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
 });
 
 Route::get('/{id}/{slug}', [ProductController::class, 'details'])->name('product.details');
